@@ -16,7 +16,6 @@ import com.MessageServer.Chat.Entities.Message;
 import com.MessageServer.Chat.Entities.Room;
 import com.MessageServer.Chat.Repo.RoomRepository;
 
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
@@ -73,6 +72,4 @@ public class RoomController {
             return ResponseEntity.ok(room.getMessages());
         }
     }
-
-
 }
