@@ -8,6 +8,7 @@ export default function AppRoutes() {
             <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/chat" element={<h1>Chat</h1>} />
+                <Route path= "*" element= {<h1>404 not found</h1>}></Route>
             </Routes>
         </div>
     )
