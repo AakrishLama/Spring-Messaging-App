@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-
+import {createRoom as createRoomAPI} from "../services/RoomService.jsx"
 
 export default function JoinCreateChat() {
     const [detail, setDetail] = useState({
@@ -20,12 +20,18 @@ export default function JoinCreateChat() {
         console.log("join chat")
     }
 
-    function createRoom() {
+    async function createRoom() {
         if(!validateForm()) {
             return
         }
-        //create room logic
-        console.log("create room")
+        try{
+            const response = await createRoomAPI(detail.roomId)
+            toast.success("Room created successfully")
+            console.log(response)
+        } catch (error) {
+            toast.error("Room creation failed")
+            console.log(error)
+        }
     }
     function validateForm() {
         if(detail.roomId.trim() === "" || detail.userName.trim() === "") {
