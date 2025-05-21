@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import {createRoom as createRoomAPI} from "../services/RoomService.jsx"
+import useChatContext from '../../context/chatContext.jsx';
+import { useNavigate } from 'react-router';
+
 
 export default function JoinCreateChat() {
+    const {roomId, setRoomId, currentUser, setCurrentUser, connected, setConnected} = useChatContext();
+    const navigate= useNavigate();
     const [detail, setDetail] = useState({
         roomId: "",
         userName: ""
@@ -15,9 +20,10 @@ export default function JoinCreateChat() {
     function joinChat() {
         if(!validateForm()) {
             return
-        }
-        // join room logic
-        console.log("join chat")
+        } 
+
+
+
     }
 
     async function createRoom() {
@@ -27,10 +33,20 @@ export default function JoinCreateChat() {
         try{
             const response = await createRoomAPI(detail.roomId)
             toast.success("Room created successfully")
-            console.log(response)
+            // console.log(response)
+            console.log(response.data)
+            setCurrentUser(detail.userName)
+            setRoomId(detail.roomId)
+            setConnected(true)
+            navigate("/chat")
+            joinChat();
         } catch (error) {
-            toast.error("Room creation failed")
-            console.log(error)
+            if(error.status === 400) {
+                toast.error("Room already exists")
+            } else{
+                toast.error("Room creation failed")
+            }
+            
         }
     }
     function validateForm() {

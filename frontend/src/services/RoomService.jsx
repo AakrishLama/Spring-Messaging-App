@@ -7,5 +7,5 @@ export const createRoom= async(roomDetail) =>{
                 "Content-Type": "application/json",
             },
         });
-    return response.data
+    return response
 }
