@@ -22,6 +22,30 @@ export default function ChatPage() {
         {
             content: "good",
             sender: "paddy",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
         }
 
     ])
@@ -54,12 +78,12 @@ export default function ChatPage() {
         <main className=" border px-10 h-screen overflow-auto w-2/3 dark:bg-gray-800 mx-auto my-20 mt-0">
             {messages.map((message, index)=>(
                 <div key = {index} className={`flex ${message.sender === username ? "justify-end" : "justify-start"}`}>
-                    <div className='mt-2 bg-green-600 p-2 rounded max-w-xs' >
+                    <div className={`mt-2   ${message.sender === username ? "bg-orange-400" : "bg-green-400"} p-2 rounded max-w-xs`} >
                         <div className='flex flex-row gap-2'>
                             <img src={"https://avatar.iran.liara.run/public/boy"} alt= "no image "
                             className='h-12 w-12'></img>
                             <div className=' flex flex-col gap-2 p-4'>
-                                <p className='text-sm font-bold'>{message.sender}</p>
+                                <p className='text-sm font-bold '>{message.sender}</p>
                                 <p>{message.content}</p>
                             </div>
                         </div>
