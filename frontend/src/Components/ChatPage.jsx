@@ -2,13 +2,36 @@ import React, { useRef, useState } from 'react'
 
 
 export default function ChatPage() {
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([
+        {
+            content: "hello",
+            sender: "Aakrish",
+        },
+        {
+            content: "hi",
+            sender: "oanvds",
+        },
+        {
+            content: "bro",
+            sender: "lama",
+        },
+        {
+            content: "vsc",
+            sender: "niroj",
+        },
+        {
+            content: "good",
+            sender: "paddy",
+        }
+
+    ])
     const [input, setInput] = useState("")
     const inputRef = useRef(null)
     const chatBoxRef = useRef(null)
     const [stompClient, setStompClient] = useState(null)
     const [roomid, setRoomid] = useState("")
-    
+    const [username, setUsername] = useState("Aakrish")
+
   return (
     <div className=''>
         <header className='dark:border-blue-500 shadow py-5 flex justify-around p-4 items-center dark:bg-blue-800'>
@@ -28,10 +51,22 @@ export default function ChatPage() {
         </header>
 
         {/* messages */}
-        <main className=" border h-screen overflow-auto w-2/3 dark:bg-gray-800 mx-auto my-20 mt-0">
-            <div>
-
-            </div>
+        <main className=" border px-10 h-screen overflow-auto w-2/3 dark:bg-gray-800 mx-auto my-20 mt-0">
+            {messages.map((message, index)=>(
+                <div key = {index} className={`flex ${message.sender === username ? "justify-end" : "justify-start"}`}>
+                    <div className='mt-2 bg-green-600 p-2 rounded max-w-xs' >
+                        <div className='flex flex-row gap-2'>
+                            <img src={"https://avatar.iran.liara.run/public/boy"} alt= "no image "
+                            className='h-12 w-12'></img>
+                            <div className=' flex flex-col gap-2 p-4'>
+                                <p className='text-sm font-bold'>{message.sender}</p>
+                                <p>{message.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            ))}
 
         </main>
 
