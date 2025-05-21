@@ -20,7 +20,7 @@ import com.MessageServer.Chat.Repo.RoomRepository;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 public class RoomController {
 
     private RoomRepository roomRepository;
