@@ -37,6 +37,7 @@ public class RoomController {
      */
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody String roomId) {
+        roomId = roomId.replace("\"", "");
         if (roomRepository.findByRoomId(roomId) != null) {
             return ResponseEntity.badRequest().body("Room already exists!");
         }

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import {createRoom as createRoomAPI} from "../services/RoomService.jsx"
+import { createRoom as createRoomAPI, joinChatApi } from "../services/RoomService.jsx"
 import useChatContext from '../../context/chatContext.jsx';
 import { useNavigate } from 'react-router';
 
 
 export default function JoinCreateChat() {
-    const {roomId, setRoomId, currentUser, setCurrentUser, connected, setConnected} = useChatContext();
-    const navigate= useNavigate();
+    const { roomId, setRoomId, currentUser, setCurrentUser, connected, setConnected } = useChatContext();
+    const navigate = useNavigate();
     const [detail, setDetail] = useState({
         roomId: "",
         userName: ""
@@ -17,9 +17,26 @@ export default function JoinCreateChat() {
             ...detail, [event.target.name]: event.target.value
         })
     }
-    function joinChat() {
-        if(!validateForm()) {
+    async function joinChat() {
+        if (!validateForm()) {
             return
+        }
+
+        try {
+            const room = await joinChatApi(detail.roomId)
+            toast.success("joined..")
+            setCurrentUser(detail.userName)
+            setRoomId(room.roomId)
+            setConnected(true)
+            navigate("/chat")
+
+        } catch (error) {
+            if (error.status === 400) {
+                toast.error("Room does not exist")
+            }else{
+                toast.error("error in joining room")
+            }
+            console.log(error);
         } 
 
 
@@ -27,10 +44,10 @@ export default function JoinCreateChat() {
     }
 
     async function createRoom() {
-        if(!validateForm()) {
+        if (!validateForm()) {
             return
         }
-        try{
+        try {
             const response = await createRoomAPI(detail.roomId)
             toast.success("Room created successfully")
             // console.log(response)
@@ -41,16 +58,16 @@ export default function JoinCreateChat() {
             navigate("/chat")
             joinChat();
         } catch (error) {
-            if(error.status === 400) {
+            if (error.status === 400) {
                 toast.error("Room already exists")
-            } else{
+            } else {
                 toast.error("Room creation failed")
             }
-            
+
         }
     }
     function validateForm() {
-        if(detail.roomId.trim() === "" || detail.userName.trim() === "") {
+        if (detail.roomId.trim() === "" || detail.userName.trim() === "") {
             toast.error("Please fill all the fields")
             return false
         }
