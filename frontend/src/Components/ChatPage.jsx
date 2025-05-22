@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
 import useChatContext from '../context/chatContext'
 import { useNavigate } from 'react-router';
+import { baseURL } from '../config/AxiosHelper';
+import SockJS from 'sockjs-client';
+import {Stomp} from "@stomp/stompjs"
 
 
 export default function ChatPage() {
@@ -69,6 +72,25 @@ export default function ChatPage() {
     const [stompClient, setStompClient] = useState(null)
     const [roomid, setRoomid] = useState("")
     const [username, setUsername] = useState("Aakrish")
+
+    // Stompclient initialization.
+    useEffect(()=>{
+        const connectWebSocket = ()=>{
+            const sock = new SockJS(`${baseURL}/chat`)
+            const client = Stomp.over(sock)
+            client.connect({}, ()=>{
+                setStompClient(client);
+                toast.success("connected")
+                client.subscribe(`/topic/room/${roomId}`, (message)=>{
+                    console.log(message);
+                    const newMessage = JSON.parse(message.body);
+                    setMessages((prev)=>[...prev, newMessage]);
+                })
+            });
+        };
+        connectWebSocket();
+
+    }, [roomId])
 
   return (
     <div className=''>
