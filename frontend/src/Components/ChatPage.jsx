@@ -1,7 +1,21 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
+import useChatContext from '../context/chatContext'
+import { useNavigate } from 'react-router';
 
 
 export default function ChatPage() {
+    const {roomId, currentUser, connected}= useChatContext();
+    console.log(roomId)
+    console.log(currentUser)
+    console.log(connected)
+
+    const navigate = useNavigate()
+    useEffect(()=>{
+        if(!connected){
+            navigate("/")
+        }
+    }, [connected, roomId, currentUser])
+
     const [messages, setMessages] = useState([
         {
             content: "hello",

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { createRoom as createRoomAPI, joinChatApi } from "../services/RoomService.jsx"
-import useChatContext from '../../context/chatContext.jsx';
+import useChatContext from "../context/ChatContext.jsx"
 import { useNavigate } from 'react-router';
 
 
