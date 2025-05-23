@@ -5,6 +5,7 @@ import { baseURL } from '../config/AxiosHelper';
 import SockJS from 'sockjs-client';
 import { Stomp } from "@stomp/stompjs"
 import { toast } from 'react-hot-toast';
+import { getMessages } from '../services/RoomService';
 
 
 export default function ChatPage() {
@@ -20,57 +21,28 @@ export default function ChatPage() {
         }
     }, [connected, roomId, currentUser])
 
-    const [messages, setMessages] = useState([
-        // {
-        //     content: "hello",
-        //     sender: "Aakrish",
-        // },
-        // {
-        //     content: "hi",
-        //     sender: "oanvds",
-        // },
-        // {
-        //     content: "bro",
-        //     sender: "lama",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "good",
-        //     sender: "paddy",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // },
-        // {
-        //     content: "vsc",
-        //     sender: "niroj",
-        // }
-
-    ])
+    const [messages, setMessages] = useState([])
     const [input, setInput] = useState("")
     const inputRef = useRef(null)
     const chatBoxRef = useRef(null)
     const [stompClient, setStompClient] = useState(null)
+
+    /**
+     * load messages of the room.
+     */
+    useEffect(() => {
+        async function loadMesssage() {
+            try {
+                const messages = await getMessages(roomId)
+                setMessages(messages)
+
+            } catch (error) {
+
+            }
+
+        }
+        loadMesssage();
+    }, [messages])
 
 
     // Stompclient initialization.
@@ -91,6 +63,9 @@ export default function ChatPage() {
         connectWebSocket();
     }, [roomId])
 
+    /**
+     * Send message in the room.
+     */
     const sendMessage = async () => {
         if (stompClient && connected && input.trim()) {
             console.log(input)
