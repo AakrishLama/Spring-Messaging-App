@@ -9,7 +9,7 @@ import { getMessages } from '../services/RoomService';
 
 
 export default function ChatPage() {
-    const { roomId, currentUser, connected } = useChatContext();
+    const { roomId, currentUser, connected, setConnected, setRoomId, setCurrentUser } = useChatContext();
     // console.log(roomId)
     // console.log(currentUser)
     // console.log(connected)
@@ -43,6 +43,8 @@ export default function ChatPage() {
         }
         loadMesssage();
     }, [messages])
+
+
 
 
     // Stompclient initialization.
@@ -79,19 +81,29 @@ export default function ChatPage() {
         }
     }
 
+    const handleLogOut=()=>{ 
+        stompClient.disconnect()
+        setConnected(false)
+        setRoomId("")
+        setCurrentUser("")
+        navigate("/")
+    }
+
+
+
 
     return (
         <div className=''>
             <header className='dark:border-blue-500 shadow py-5 flex justify-around p-4 items-center dark:bg-blue-800'>
                 <div>
-                    <h1 className='text-2xl font-semibold'> Room:<span>groupChat</span></h1>
+                    <h1 className='text-2xl font-semibold'> Room:<span>{roomId}</span></h1>
                 </div>
 
                 <div>
-                    <h1 className='text-2xl font-semibold'> User:<span>Aakrish</span></h1>
+                    <h1 className='text-2xl font-semibold'> User:<span>{currentUser}</span></h1>
 
                 </div>
-                <button className='btn btn-danger rounded-full '>Leave Room</button>
+                <button onClick={handleLogOut} className='btn btn-danger rounded-full '>Leave Room</button>
 
                 <div>
 
@@ -99,7 +111,7 @@ export default function ChatPage() {
             </header>
 
             {/* messages */}
-            <main className=" border px-10 h-screen overflow-auto w-2/3 dark:bg-gray-800 mx-auto my-20 mt-0">
+            <main  className=" border px-10 h-screen overflow-auto w-2/3 dark:bg-gray-800 mx-auto my-20 mt-0">
                 {messages.map((message, index) => (
                     <div key={index} className={`flex ${message.sender === currentUser ? "justify-end" : "justify-start"}`}>
                         <div className={`mt-2   ${message.sender === currentUser ? "bg-orange-400" : "bg-green-400"} p-2 rounded max-w-xs`} >
@@ -123,13 +135,16 @@ export default function ChatPage() {
                 <div className="h-full border w-2/3 mx-auto dark:bg-grey-800 gap-4 rounded">
                     <input value={input}
                         onChange={(e) => { setInput(e.target.value) }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                sendMessage()
+                            }
+                        }}
                         type="textArea" placeholder="Type your message here"
                         className="dark:border-gray-700 h-full w-11/12 rounded text-center focus:outline-0">
                     </input>
                     <button onClick={sendMessage} className='btn btn-primary flex rounded-full p-2 mx-2'>send</button>
                 </div>
-
-
             </div>
 
         </div>
